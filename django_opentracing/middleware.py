@@ -61,6 +61,7 @@ class OpenTracingMiddleware(MiddlewareMixin):
         # Normalize the tracing field in settings, including the old field.
         settings.OPENTRACING_TRACING = tracing
         settings.OPENTRACING_TRACER = tracing
+        self._tracing = tracing
 
         # Potentially set the global Tracer (unless we rely on it already).
         if getattr(settings, 'OPENTRACING_SET_GLOBAL_TRACER', False):
@@ -71,7 +72,6 @@ class OpenTracingMiddleware(MiddlewareMixin):
         # Jaeger and Django>=1.10
         if self._tracing is None:
             self._init_tracing()
-            self._tracing = settings.OPENTRACING_TRACER
 
         # determine whether this middleware should be applied
         # NOTE: if tracing is on but not tracing all requests, then the tracing
@@ -88,8 +88,12 @@ class OpenTracingMiddleware(MiddlewareMixin):
         self._tracing._apply_tracing(request, view_func, traced_attributes)
 
     def process_exception(self, request, exception):
+        if self._tracing is None:
+            self._init_tracing()
         self._tracing._finish_tracing(request, error=exception)
 
     def process_response(self, request, response):
+        if self._tracing is None:
+            self._init_tracing()
         self._tracing._finish_tracing(request, response=response)
         return response
