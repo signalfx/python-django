@@ -1,3 +1,4 @@
+.pytest_cache/
 *.pyc
 dist
 bin
@@ -6,3 +7,4 @@ lib
 *.egg-info
 build
 env/
+venv/

@@ -101,13 +101,11 @@ class TestDjangoOpenTracingMiddleware(SimpleTestCase):
         spans = settings.OPENTRACING_TRACING._tracer.finished_spans()
         assert len(spans) == 1
         assert spans[0].tags.get(tags.ERROR, False) is True
-
-        assert len(spans[0].logs) == 1
-        assert spans[0].logs[0].key_values.get('event', None) is 'error'
-        assert isinstance(
-                spans[0].logs[0].key_values.get('error.object', None),
-                ValueError
-        )
+        assert spans[0].tags.get('sfx.error.kind', False) == 'ValueError'
+        assert spans[0].tags.get('sfx.error.object', False) == '<class \'ValueError\'>'
+        assert spans[0].tags.get('sfx.error.message', False) == 'key'
+        assert 'raise ValueError(\'key\')' in spans[0].tags.get('sfx.error.stack', '')
+        assert len(spans[0].tags.get('sfx.error.stack', '')) > 50
 
     @override_settings(OPENTRACING_START_SPAN_CB=start_span_cb)
     def test_middleware_traced_start_span_cb(self):
