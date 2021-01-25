@@ -44,5 +44,15 @@ lint:
 test: 
 	make -C tests test
 
-build: 
-	python setup.py build
+.PHONY: tools
+tools:
+	pip install sdist twine[readme_renderer]
+
+.PHONY: build
+build:
+	python setup.py sdist
+	twine check dist/*tar.gz
+
+.PHONY: publish
+publish:
+	twine upload dist/signalfx-instrumentation-django-${VERSION}.tar.gz

@@ -3,14 +3,14 @@ import versioneer
 
 version=versioneer.get_version()
 setup(
-    name='django_opentracing',
+    name='signalfx-instrumentation-django',
     cmdclass=versioneer.get_cmdclass(),
     version=version,
-    url='https://github.com/opentracing-contrib/python-django/',
-    download_url='https://github.com/opentracing-contrib/python-django/tarball/'+version,
+    url='https://github.com/signalfx/python-django/',
+    download_url='https://github.com/signalfx/python-django/tarball/'+version,
     license='BSD',
-    author='Kathy Camenzind',
-    author_email='kcamenzind@lightstep.com',
+    author='SignalFx, Inc.',
+    author_email='signalfx-oss@splunk.com',
     description='OpenTracing support for Django applications',
     long_description=open('README.rst').read(),
     packages=['django_opentracing', 'tests'],

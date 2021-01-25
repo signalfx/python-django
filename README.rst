@@ -19,7 +19,7 @@ Installation
 
 Run the following command::
 
-    $ pip install django_opentracing
+    $ pip install signalfx-instrumentation-django
 
 Setting up Tracing
 ==================
